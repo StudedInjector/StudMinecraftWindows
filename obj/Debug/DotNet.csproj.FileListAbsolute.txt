@@ -1,0 +1,16 @@
+C:\Users\TUF\source\repos\DotNet\DotNet\bin\Debug\DotNet.exe.config
+C:\Users\TUF\source\repos\DotNet\DotNet\bin\Debug\DotNet.exe
+C:\Users\TUF\source\repos\DotNet\DotNet\bin\Debug\DotNet.pdb
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.csproj.AssemblyReference.cache
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\MainWindow.baml
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\MainWindow.g.cs
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\App.g.cs
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet_MarkupCompile.cache
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet_MarkupCompile.lref
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\App.baml
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.g.resources
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.Properties.Resources.resources
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.csproj.GenerateResource.cache
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.csproj.CoreCompileInputs.cache
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.exe
+C:\Users\TUF\source\repos\DotNet\DotNet\obj\Debug\DotNet.pdb
