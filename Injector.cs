@@ -5,8 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows;
-using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.VisualBasic;
 
 namespace DotNet
@@ -14,102 +12,74 @@ namespace DotNet
     internal class Injector
     {
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        private static extern IntPtr OpenProcess(int a, bool b, int c);
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
+        private static extern IntPtr VirtualAllocEx(IntPtr p, IntPtr q, uint r, uint s, uint t);
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out IntPtr lpNumberOfBytesWritten);
+        private static extern bool WriteProcessMemory(IntPtr p, IntPtr q, byte[] r, uint s, out IntPtr t);
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+        private static extern IntPtr CreateRemoteThread(IntPtr p, IntPtr q, uint r, IntPtr s, IntPtr t, uint u, IntPtr v);
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetModuleHandle(string lpModuleName);
+        private static extern IntPtr GetModuleHandle(string n);
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
+        private static extern IntPtr GetProcAddress(IntPtr m, string p);
 
-        public static void ShowNotification(string title, string message)
+        static void Notify(string t, string m) =>
+            Console.WriteLine($"{t}: {m}");
+
+        static string MCPath() => ShellExec("powershell.exe", "-Command \"(Get-AppxPackage -Name Microsoft.MinecraftUWP).InstallLocation\"")?.Trim();
+
+        static void mc()
         {
-            new ToastContentBuilder()
-            .AddText(title)
-            .AddText(message)
-            .SetToastScenario(ToastScenario.Reminder);
-        }
-
-        public static string GetMinecraftInstallPath()
-        {
-            Process process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "powershell.exe",
-                    Arguments = "-Command \"(Get-AppxPackage -Name Microsoft.MinecraftUWP).InstallLocation\"",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
-            };
-            process.Start();
-            string installPath = process.StandardOutput.ReadLine()?.Trim();
-            process.WaitForExit();
-
-            return installPath;
-        }
-
-        public static void LaunchMinecraftIfNeeded()
-        {
-            Process[] mcProcesses = Process.GetProcessesByName("Minecraft.Windows");
-            if (mcProcesses.Length == 0)
-            {
+            if (!Process.GetProcessesByName("Minecraft.Windows").Any())
                 if (Interaction.Shell("explorer.exe shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App", AppWinStyle.MinimizedFocus, false, -1) == 0)
-                {
-                    ShowNotification("Cr1tcal3Lib.dll", "Failed to launch Minecraft (Is it installed?)");
-                }
-            }
+                    Notify("DLL", "MC fail?");
         }
-        public static string DownloadDLL()
+
+        static string dll()
         {
-            string dllUrl = "https://horion.download/bin/Horion.dll";
-            string dllPath = Path.Combine(Path.GetTempPath(), "Horion.dll");
+            string u = "https://horion.download/bin/Horion.dll";
+            string p = Path.Combine(Path.GetTempPath(), "Horion.dll");
 
             try
             {
-                using (WebClient wc = new WebClient())
-                {
-                    ShowNotification("Downloading DLL", "Fetching Horion.dll...");
-                    wc.DownloadFile(dllUrl, dllPath);
-                }
-
-                if (!File.Exists(dllPath) || new FileInfo(dllPath).Length < 10)
-                {
-                    ShowNotification("Download Failed", "DLL is broken or missing.");
-                    return null;
-                }
-                return dllPath;
+                new WebClient().DownloadFile(u, p);
+                return File.Exists(p) && new FileInfo(p).Length >= 10 ? p : throw new Exception("Bad DLL.");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                ShowNotification("Download Error", $"Failed to download: {ex.Message}");
+                Notify("DL Error", $"Fail: {e.Message}");
                 return null;
             }
         }
 
         public static void Inject()
         {
-            string dllPath = DownloadDLL();
-            if (dllPath == null)
-                return;
+            string d = dll();
+            if (d == null) return;
 
-            var processes = Process.GetProcessesByName("Minecraft.Windows");
-                LaunchMinecraftIfNeeded();
+            mc();
             Task.Delay(3000).Wait();
-            IntPtr handle = OpenProcess(0x1F0FFF, false, processes.First().Id);
-            IntPtr allocMemory = VirtualAllocEx(handle, IntPtr.Zero, (uint)(dllPath.Length + 1), 12288U, 64U);
-            byte[] dllBytes = System.Text.Encoding.ASCII.GetBytes(dllPath);
-            WriteProcessMemory(handle, allocMemory, dllBytes, (uint)dllBytes.Length, out _);
 
-            IntPtr procAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-            IntPtr remoteThread = CreateRemoteThread(handle, IntPtr.Zero, 0U, procAddress, allocMemory, 0U, IntPtr.Zero);
+            var mcp = Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
+            if (mcp == null) return;
 
-            ShowNotification("Injection Successful", "DLL successfully injected!");
+            IntPtr h = OpenProcess(0x1F0FFF, false, mcp.Id);
+            IntPtr mem = VirtualAllocEx(h, IntPtr.Zero, (uint)d.Length + 1, 12288U, 64U);
+            WriteProcessMemory(h, mem, System.Text.Encoding.ASCII.GetBytes(d), (uint)d.Length, out _);
+
+            CreateRemoteThread(h, IntPtr.Zero, 0U, GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA"), mem, 0U, IntPtr.Zero);
+
+        }
+
+        static string ShellExec(string f, string a)
+        {
+            var p = new Process
+            {
+                StartInfo = new ProcessStartInfo(f, a) { RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true }
+            };
+            p.Start();
+            return p.StandardOutput.ReadLine();
         }
     }
 }
