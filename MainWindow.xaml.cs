@@ -84,7 +84,7 @@ namespace DotNet
         {
             if (ProgressBar.Value < 100)
             {
-                this.Title = grstr();
+                this.Title = grstr(); // GetWindowTitle method blocker
                 this.ToolTip = grstr();
                 ProgressBar.Value += 2.2;
                 StatusText.Text = "Downloading DLL" + new string('.', (int)(ProgressBar.Value / 33 % 3 + 1));
