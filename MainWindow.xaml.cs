@@ -1,107 +1,156 @@
 ﻿using System;
-using System.IO;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Microsoft.Toolkit.Uwp.Notifications;
-
+using StudInjector;
 namespace DotNet
 {
     public partial class MainWindow : Window
     {
-        private DispatcherTimer _t = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(30) };
-        private bool _a, _f = true;
-        private string wl { get { return $"{Left} {Top}"; } }
-
+        private DispatcherTimer _progressTimer; private bool _isAnimating; private bool _fadeEnabled = true; private string windowLocation => $"{Left} {Top}";
         public MainWindow()
         {
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Contains("--f") && bool.TryParse(args[Array.IndexOf(args, "--f") + 1], out bool fade)) _f = fade;
-            if (args.Contains("--wl") && int.TryParse(args[Array.IndexOf(args, "--wl") + 1], out int x) && int.TryParse(args[Array.IndexOf(args, "--wl") + 2], out int y)) { Left = x; Top = y; }
+
+            if (args.Contains("--f"))
+            {
+                int index = Array.IndexOf(args, "--f");
+                if (index + 1 < args.Length && bool.TryParse(args[index + 1], out bool fadeArg))
+                    _fadeEnabled = fadeArg;
+            }
+
+            if (args.Contains("--wl"))
+            {
+                int index = Array.IndexOf(args, "--wl");
+                if (index + 2 < args.Length && int.TryParse(args[index + 1], out int x) && int.TryParse(args[index + 2], out int y))
+                {
+                    Left = x;
+                    Top = y;
+                }
+            }
 
             InitializeComponent();
-            LocationChanged += delegate { Console.WriteLine($"Moved: {wl}"); };
-            _t.Tick += P;
-            Opacity = _f ? 0 : 1;
-            if (_f) FI();
+            LocationChanged += UpdateWindowLocation;
+
+            _progressTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(30) };
+            _progressTimer.Tick += UpdateProgress;
+
+            if (!_fadeEnabled) Opacity = 1;
+            else BeginFadeIn();
         }
 
-        public static void Notify(string t, string m, string i) =>
-            new ToastContentBuilder().AddText(t).AddText(m).AddInlineImage(new Uri(i)).SetToastScenario(ToastScenario.Reminder).Show();
-
-        private void InjectButton_Click(object s, RoutedEventArgs e)
+        private void UpdateWindowLocation(object sender, EventArgs e)
         {
-            if (_a) return;
-            _a = true;
+            Console.WriteLine($"Window moved: {windowLocation}");
+        }
+
+        public static void ShowNotification(string title, string message, string imagePath)
+        {
+            new ToastContentBuilder()
+                .AddText(title)
+                .AddText(message)
+                .AddInlineImage(new Uri(imagePath)) // Adds image
+                .SetToastScenario(ToastScenario.Reminder) // Ensures normal behavior
+                .Show();
+        }
+
+        private async void InjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Topmost = true;
+            if (_isAnimating) return;
+            _isAnimating = true;
             InjectButton.IsEnabled = false;
-            AN(MainContent, 0);
-            AN(ProgressContent, 1);
-            _t.Start();
+            AnimateElement(MainContent, 0);
+            AnimateElement(ProgressContent, 1);
+            _progressTimer.Start();
         }
 
-        private bool _inj;
-
-        private void P(object s, EventArgs e)
+        private async void UpdateProgress(object sender, EventArgs e)
         {
-            if (ProgressBar.Value == 0 && !_inj) { _inj = true; Task.Run(delegate { Injector.Inject(); }); }
-
             if (ProgressBar.Value < 100)
             {
                 ProgressBar.Value += 2.2;
-                StatusText.Text = "Downloading Horion.dll" + new string('.', (int)(ProgressBar.Value / 33 % 3 + 1));
+                StatusText.Text = "Downloading DLL" + new string('.', (int)(ProgressBar.Value / 33 % 3 + 1));
                 return;
             }
 
-            _t.Stop();
-            var r = new DoubleAnimation(300, 0, TimeSpan.FromSeconds(0.5)) { EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut } };
+            _progressTimer.Stop();
 
-            r.Completed += delegate
+            // Finally::
+            var reverseAnim = new DoubleAnimation
             {
-                ProgressBar.Value = 0;
-                StatusText.Text = "Done";
-                _a = false;
-                InjectButton.IsEnabled = true;
+                From = 300,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.5),
+                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut }
             };
 
-            ProgressBar.BeginAnimation(WidthProperty, r);
-            AN(MainContent, 1);
-            AN(ProgressContent, 0);
-            _a = false;
-            InjectButton.IsEnabled = true;
-            Task.Delay(1).Wait();
-            Injector.Inject();
-            Notify("Horion", "Injected", "C:\\Users\\TUF\\source\\repos\\DotNet\\DotNet\\stud.png");
-            Environment.Exit(0xf);
+            ProgressBar.BeginAnimation(WidthProperty, reverseAnim);
+            StatusText.Text = "Injecting...";
+
+            try
+            {
+                bool success = await Injector.Inject();
+
+                StatusText.Text = success ? "Success!" : "Failed";
+                if (success) Environment.Exit(0);
+            }
+            finally
+            {
+                _isAnimating = false;
+                InjectButton.IsEnabled = true;
+            }
         }
 
-        private void AN(FrameworkElement e, double o) =>
-            e.BeginAnimation(OpacityProperty, new DoubleAnimation(o, TimeSpan.FromMilliseconds(1000)) { EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut } });
+        private void AnimateElement(FrameworkElement element, double targetOpacity)
+        {
+            var opacityAnim = new DoubleAnimation(targetOpacity, TimeSpan.FromMilliseconds(1000))
+            {
+                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            element.BeginAnimation(OpacityProperty, opacityAnim);
+        }
 
-        private void Window_MouseLeftButtonDown(object s, MouseButtonEventArgs e)
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left) DragMove();
         }
 
-        private void CloseButton_Click(object s, RoutedEventArgs e) => FO();
-
-        private void Window_Closing(object s, System.ComponentModel.CancelEventArgs e)
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Opacity > 0) { e.Cancel = true; FO(); }
+            BeginFadeOut();
         }
 
-        private void FO()
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var a = new DoubleAnimation(0, TimeSpan.FromSeconds(0.714455)) { EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut } };
-            a.Completed += delegate { Environment.Exit(0); };
-            BeginAnimation(OpacityProperty, a);
+            if (Opacity > 0)
+            {
+                e.Cancel = true;
+                BeginFadeOut();
+            }
         }
 
-        private void FI() =>
-            BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.714455)) { EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut } });
+        private void BeginFadeOut()
+        {
+            var anim = new DoubleAnimation(0, TimeSpan.FromSeconds(0.714455))
+            {
+                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            anim.Completed += (s, _) => Environment.Exit(0);
+            BeginAnimation(OpacityProperty, anim);
+        }
+
+        private void BeginFadeIn()
+        {
+            var fadeAnim = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.714455))
+            {
+                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            BeginAnimation(OpacityProperty, fadeAnim);
+        }
     }
 }

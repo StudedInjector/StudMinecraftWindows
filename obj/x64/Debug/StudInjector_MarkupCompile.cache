@@ -4,7 +4,7 @@
 winexe
 C#
 .cs
-C:\Users\TUF\source\repos\DotNet\StudMinecraftWindows\obj\Debug\
+C:\Users\TUF\source\repos\DotNet\StudMinecraftWindows\obj\x64\Debug\
 DotNet
 none
 false
@@ -12,9 +12,9 @@ DEBUG;TRACE
 C:\Users\TUF\source\repos\DotNet\StudMinecraftWindows\App.xaml
 1219584333
 
-7-1599654676
+7-1795989310
 208-548934978
 MainWindow.xaml;
 
-False
+True
 

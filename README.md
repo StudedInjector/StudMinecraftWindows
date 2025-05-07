@@ -2,6 +2,6 @@
 Stud is an injector for windows
 made purely in C#
 
-Dll: Horion.dll
+Dll: horion.dll
 Source: horion.download
 Credits: horion
