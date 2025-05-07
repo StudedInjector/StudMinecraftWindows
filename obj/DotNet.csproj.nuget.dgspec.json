@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\TUF\\source\\repos\\DotNet\\DotNet\\DotNet.csproj": {}
+    "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\DotNet.csproj": {}
   },
   "projects": {
-    "C:\\Users\\TUF\\source\\repos\\DotNet\\DotNet\\DotNet.csproj": {
+    "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\DotNet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\TUF\\source\\repos\\DotNet\\DotNet\\DotNet.csproj",
+        "projectUniqueName": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\DotNet.csproj",
         "projectName": "StudInjector",
-        "projectPath": "C:\\Users\\TUF\\source\\repos\\DotNet\\DotNet\\DotNet.csproj",
+        "projectPath": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\DotNet.csproj",
         "packagesPath": "C:\\Users\\TUF\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\TUF\\source\\repos\\DotNet\\DotNet\\obj\\",
+        "outputPath": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "UsingMicrosoftNETSdk": false,
@@ -44,10 +44,6 @@
       "frameworks": {
         "net48": {
           "dependencies": {
-            "Costura.Fody": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
             "Microsoft.Toolkit.Uwp.Notifications": {
               "target": "Package",
               "version": "[7.1.3, )"
@@ -62,20 +58,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true
-        }
-      },
-      "runtimes": {
-        "win": {
-          "#import": []
-        },
-        "win-arm64": {
-          "#import": []
-        },
-        "win-x64": {
-          "#import": []
-        },
-        "win-x86": {
-          "#import": []
         }
       }
     }
