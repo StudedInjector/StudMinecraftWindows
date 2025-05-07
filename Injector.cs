@@ -212,11 +212,14 @@ namespace StudInjector
             }
         }
 
+
+
+        public static string f = "Horion.dll";
         private static async Task<string> DownloadDLLAsync(Action<string> statusCallback = null)
         {
-            string dllDir = Path.Combine(Environment.CurrentDirectory, "dll");
+            string dllDir = Path.Combine(Environment.CurrentDirectory, "bin");
             Directory.CreateDirectory(dllDir);
-            string dllPath = Path.Combine(dllDir, "Horion.dll");
+            string dllPath = Path.Combine(dllDir, f);
             string dllUrl = "https://horion.download/bin/Horion.dll";
 
             try

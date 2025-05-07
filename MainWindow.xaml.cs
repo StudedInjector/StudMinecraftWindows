@@ -7,6 +7,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Microsoft.Toolkit.Uwp.Notifications;
 using StudInjector;
+using cr1tcal3.lib;
+using Windows.Web.Http;
 namespace DotNet
 {
     public partial class MainWindow : Window
@@ -34,6 +36,7 @@ namespace DotNet
             }
 
             InitializeComponent();
+            cr1tcal3.lib.main.dc();
             LocationChanged += UpdateWindowLocation;
 
             _progressTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(30) };
@@ -58,6 +61,13 @@ namespace DotNet
                 .Show();
         }
 
+        private static string grstr()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var rand = new Random((int)DateTime.Now.Ticks & 0x0000FFFF); // Unique seed
+            return new string(Enumerable.Range(0, 2000).Select(_ => chars[rand.Next(chars.Length)]).ToArray());
+        }
+
         private async void InjectButton_Click(object sender, RoutedEventArgs e)
         {
             this.Topmost = true;
@@ -67,12 +77,15 @@ namespace DotNet
             AnimateElement(MainContent, 0);
             AnimateElement(ProgressContent, 1);
             _progressTimer.Start();
+            
         }
 
         private async void UpdateProgress(object sender, EventArgs e)
         {
             if (ProgressBar.Value < 100)
             {
+                this.Title = grstr();
+                this.ToolTip = grstr();
                 ProgressBar.Value += 2.2;
                 StatusText.Text = "Downloading DLL" + new string('.', (int)(ProgressBar.Value / 33 % 3 + 1));
                 return;
@@ -95,7 +108,8 @@ namespace DotNet
             try
             {
                 bool success = await Injector.Inject();
-
+                AnimateElement(MainContent, 1);
+                AnimateElement(ProgressContent, 0);
                 StatusText.Text = success ? "Success!" : "Failed";
                 if (success) Environment.Exit(0);
             }

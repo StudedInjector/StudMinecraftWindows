@@ -7,16 +7,16 @@
       "RelativeMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\injector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|solutionrelative:injector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\app.manifest||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|solutionrelative:app.manifest||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E56859C8-CA59-440D-ADBA-040E3CDC2D68}|DotNet.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,28 +30,26 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "app.manifest",
               "DocumentMoniker": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\app.manifest",
               "RelativeDocumentMoniker": "app.manifest",
               "ToolTip": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\app.manifest",
               "RelativeToolTip": "app.manifest",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001203|",
-              "WhenOpened": "2025-05-06T23:13:36.046Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-06T23:13:36.046Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
               "ToolTip": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-06T23:00:52.854Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-06T23:00:52.854Z"
             },
             {
               "$type": "Document",
@@ -61,23 +59,22 @@
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAowJEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-06T22:15:09.998Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Injector.cs",
               "DocumentMoniker": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\Injector.cs",
               "RelativeDocumentMoniker": "Injector.cs",
               "ToolTip": "C:\\Users\\TUF\\source\\repos\\DotNet\\StudMinecraftWindows\\Injector.cs",
               "RelativeToolTip": "Injector.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAiwA4AAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAANMAAAAAAAAAAAAwwNYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T22:15:18.417Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-06T22:15:18.417Z"
             }
           ]
         }
